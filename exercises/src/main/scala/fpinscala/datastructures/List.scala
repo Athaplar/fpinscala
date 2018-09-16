@@ -56,13 +56,41 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(_,ys) => ys
   }
 
-  def setHead[A](l: List[A], h: A): List[A] = ???
+  def setHead[A](l: List[A], h: A): List[A] =
+    l match {
+      case Nil => sys.error(" Cannot set head of a NIL ")
+      case Cons(_,ys) => Cons(h,ys)
+    }
 
-  def drop[A](l: List[A], n: Int): List[A] = ???
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = ???
+  def drop[A](l: List[A], n: Int): List[A] =
+    (l,n) match {
+      case (Nil,_) => Nil
+      case (xl,0) => xl
+      case (Cons(_,xs),_) => drop(xs,n-1)
+    }
 
-  def init[A](l: List[A]): List[A] = ???
+  /*
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] =
+    l match {
+      case Nil => Nil
+      case Cons(x,ys)=> if(f(x)) dropWhile(ys,f) else ys
+    }
+*/
+  //Below is shorter version from solution
+
+  def dropWhile[A](l: List[A],f: A => Boolean): List[A] =
+  l match {
+    case Cons(h,t)  if f(h) => dropWhile(t,f)
+    case _ => l
+  }
+
+  def init[A](l: List[A]): List[A] =
+    l match {
+     case Cons(_,Nil) => Nil
+     case Nil => sys.error(" No init on Nil!")
+     case Cons(x,y) => Cons(x,init(y))
+    }
 
   def length[A](l: List[A]): Int = ???
 
